@@ -1,13 +1,5 @@
 class NeedlemanWunsch:
     def __init__(self, seq1:str, seq2:str, match_score=1, mismatch_penalty=-1, gap_penalty=-2):
-        """
-        args:
-            seq1: str
-            seq2: str
-            match_score: int
-            mismatch_score: int
-            gap_penalty: int    
-        """
         self.seq1 = seq1
         self.seq2 = seq2
         self.match_score = match_score
@@ -18,6 +10,7 @@ class NeedlemanWunsch:
     def initialize(self):
         self.score_matrix = [[0 for i in range(len(self.seq2) + 1)] for j in range(len(self.seq1) + 1)]
         
+        # add gap penalty to the first row and first column
         for i in range(len(self.seq1)+1):
           self.score_matrix[i][0] = i * self.gap_penalty
         
@@ -101,12 +94,12 @@ class SmithWaterman(NeedlemanWunsch):
             diagonal_score = self.mismatch_penalty
 
           # at each cell we compute what the optimal move will be
-          max_move = max(
+          optimal_move = max(
               self.score_matrix[i-1][j-1] + diagonal_score, 
               self.score_matrix[i-1][j] + self.gap_penalty, 
               self.score_matrix[i][j-1] + self.gap_penalty, 0) # zero added to ensure opmimal move doesn't have negative cost
            
-          self.score_matrix[i][j] = max_move
+          self.score_matrix[i][j] = optimal_move
 
   def propagate_backwards(self):
       
@@ -121,8 +114,8 @@ class SmithWaterman(NeedlemanWunsch):
       aligned_1 = []
       aligned_2 = []
       diagonal_score = 0
-      # start at the bottom right corner of the matrix
-      
+
+      # start at the cell with the maximum score
       i,j = pos_i,pos_j
 
       while self.score_matrix[i][j] != 0:
@@ -135,22 +128,29 @@ class SmithWaterman(NeedlemanWunsch):
             aligned_1.append(self.seq1[i-1])
             aligned_2.append("-")
             i -= 1
+
           else:
             if self.seq1[i-1] == self.seq2[j-1]:
               diagonal_score = self.match_score
+
             else:
               diagonal_score = self.mismatch_penalty
             if self.score_matrix[i][j] == self.score_matrix[i-1][j-1] + diagonal_score:
               aligned_1.append(self.seq1[i-1])
               aligned_2.append(self.seq2[j-1])
+
               i , j = i-1, j-1
+
             elif self.score_matrix[i][j] == self.score_matrix[i-1][j] + self.gap_penalty:
               aligned_1.append(self.seq1[i-1])
               aligned_2.append('-')
+
               i , j = i-1, j
+
             elif self.score_matrix[i][j] == self.score_matrix[i][j-1] + self.gap_penalty:
               aligned_2.append(self.seq2[j-1])
               aligned_1.append('-')
+
               i , j = i, j-1
 
       return "".join(aligned_1[::-1]), "".join(aligned_2[::-1])
