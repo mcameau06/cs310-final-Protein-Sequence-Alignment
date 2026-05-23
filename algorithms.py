@@ -1,13 +1,6 @@
 class NeedlemanWunsch:
     def __init__(self, seq1:str, seq2:str, match_score=1, mismatch_penalty=-1, gap_penalty=-2):
-        """
-        args:
-            seq1: str
-            seq2: str
-            match_score: int
-            mismatch_score: int
-            gap_penalty: int    
-        """
+        
         self.seq1 = seq1
         self.seq2 = seq2
         self.match_score = match_score
