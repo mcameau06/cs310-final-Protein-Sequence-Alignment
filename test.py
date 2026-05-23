@@ -6,7 +6,7 @@ from itertools import combinations
 
 def read_sequences(filepath):
     sequences = {}
-    # each file may have multiple sequences
+    # each file may have multiple chains
     for record in SeqIO.parse(filepath, "fasta"):
         sequences[record.id] = str(record.seq)
     return sequences
@@ -23,7 +23,7 @@ def alignment_stats(a1, a2):
         else:
             mismatches += 1
     total = len(a1)
-    print(f"Matches:    {matches}/{total} ({100*matches/total}%)")
+    print(f"Matches:    {matches}/{total} or {100*matches/total}%")
     print(f"Mismatches: {mismatches}")
     print(f"Gaps:       {gaps}")
 
