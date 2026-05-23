@@ -23,7 +23,7 @@ def alignment_stats(a1, a2):
         else:
             mismatches += 1
     total = len(a1)
-    print(f"Matches:    {matches}/{total}")
+    print(f"Matches:    {matches}/{total} ({100*matches/total}%)")
     print(f"Mismatches: {mismatches}")
     print(f"Gaps:       {gaps}")
 
@@ -69,5 +69,5 @@ if __name__ == "__main__":
     parser.add_argument("--gap", type=int, default=-2, help= "gap penalty")
 
     args = parser.parse_args()
-    
+
     run_alignment(args)
