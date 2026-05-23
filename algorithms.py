@@ -14,7 +14,6 @@ class NeedlemanWunsch:
         self.mismatch_penalty = mismatch_penalty
         self.gap_penalty = gap_penalty
         self.score_matrix = []
-        self.pointer_matrix = []
 
     def initialize(self):
         self.score_matrix = [[0 for i in range(len(self.seq2) + 1)] for j in range(len(self.seq1) + 1)]
