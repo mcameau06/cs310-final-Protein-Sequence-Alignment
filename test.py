@@ -29,9 +29,12 @@ def alignment_stats(a1, a2):
 
 
 def run_alignment(args):
+    try:
+        seqs1 = read_sequences(args.file1)
+        seqs2 = read_sequences(args.file2)
 
-    seqs1 = read_sequences(args.file1)
-    seqs2 = read_sequences(args.file2)
+    except FileNotFoundError:
+        print("A FASTA file isn't found")
 
     all_seqs = {**seqs1, **seqs2}
 
@@ -39,15 +42,20 @@ def run_alignment(args):
 
     for (name1, seq1), (name2, seq2) in combinations(all_seqs.items(), 2):
         print(f"\n{name1} vs {name2}")
-        if args.algorithm == "nw":
+        if args.algorithm == "nw":      
             aligner = NeedlemanWunsch(seq1, seq2, args.match, args.mismatch, args.gap)
         else:
             aligner = SmithWaterman(seq1, seq2, args.match, args.mismatch, args.gap)
-        a1, a2 = aligner.align()
-        print(f"Seq 1: {a1}")
-        print(f"Seq 2: {a2}")
-        alignment_stats(a1, a2)
 
+        try:
+            a1, a2 = aligner.align()
+
+            print(f"Seq 1: {a1}")
+            print(f"Seq 2: {a2}")
+            alignment_stats(a1, a2)
+
+        except Exception as e:
+            print(f"Error performing alignment, {e}")
 
 if __name__ == "__main__":
         
